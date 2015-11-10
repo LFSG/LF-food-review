@@ -1,15 +1,15 @@
 var Sequelize = require('sequelize');
 var express = require('express');
-var config = require('config');
 
-var sequelize = new Sequelize(config.get('db.name'), config.get('db.user'), config.get('db.password'), {
+//initialize test database
+var sequelize = new Sequelize('foodtest', 'test', 'mocha', {
   host: 'localhost',
   dialect: 'postgres'
 });
 
-// HERE'S THE ONE TABLE WITH ALL DATA
-var PlaceYelp = sequelize.define('place_yelp', {
-  name: {type: Sequelize.STRING},
+//set-up yelp test model
+var PlaceYelp = sequelize.define('test_yelp', {
+  name: {type: Sequelize.STRING, unique: true},
   rating: {type: Sequelize.FLOAT},
   review_count: {type: Sequelize.INTEGER},
   lat: {type: Sequelize.FLOAT},
@@ -20,7 +20,7 @@ var PlaceYelp = sequelize.define('place_yelp', {
   postal_code: {type: Sequelize.INTEGER}
 });
 
-var Foursquare = sequelize.define('foursquare', {
+var Foursquare = sequelize.define('test_foursquare', {
   name: {type: Sequelize.STRING, unique: true},
   rating: {type: Sequelize.FLOAT},
   review_count: {type: Sequelize.INTEGER},
@@ -33,35 +33,46 @@ var Foursquare = sequelize.define('foursquare', {
 });
 
 sequelize.authenticate().then(function(err, data) {
-  console.log('Connected with PostgreSQL on non-test');
+  console.log('Connected with PostgreSQL');
 }).catch(function(err) {
   console.log(err.message);
 });
 
 
+function addYelp(data) {
+  PlaceYelp.sync().then(function() {
+    var result = {
+      name: 'test',
+      rating: 1,
+      review_count: 1,
+      lat: 1,
+      long: 1,
+      address: '123 Fake Street',
+      city: 'LA',
+      state: 'CA',
+      postal_code: 01234
+      };
+      PlaceYelp.create(result);
+  });
+}
 
-module.exports = {
-  model: PlaceYelp,
-  yelp: function(data)  {
-    PlaceYelp.sync().then(function() {
-      data.forEach(function(item) {
-        var result = {
-          name: item.name,
-          rating: item.rating,
-          review_count: item.review_count,
-          lat: item.lat,
-          long: item.long,
-          address: item.address,
-          city: item.city,
-          state: item.state,
-          postal_code: item.postal_code
-        };
-        PlaceYelp.create(result).then(function() {
-          console.log("YELP DONE");
-        });
-      });
-    });
-  },
+function findYelp(data) {
+  PlaceYelp.sync().then(function() {
+    var result = {
+      name: 'test',
+      rating: 1,
+      review_count: 1,
+      lat: 1,
+      long: 1,
+      address: '123 Fake Street',
+      city: 'LA',
+      state: 'CA',
+      postal_code: 01234
+      };
+      PlaceYelp.create(result);
+  });
+}
+
   foursquare: function(data)  {
     Foursquare.sync().then(function() {
       data.forEach(function(item) {

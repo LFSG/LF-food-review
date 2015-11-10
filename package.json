@@ -4,7 +4,10 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "nodemon server/server.js"
+    "start-dev": "export NODE_ENV=development; nodemon server/server.js",
+    "start-prod": "export NODE_ENV=production; nodemon server/server.js",
+    "test-server": "mocha test/index.test.js -w",
+    "test-db": "mocha test/db.test.js"
   },
   "author": "",
   "license": "ISC",
@@ -16,20 +19,26 @@
     "angular-route": "^1.4.7",
     "angular-ui-router": "^0.2.15",
     "bluebird": "^3.0.5",
+    "body-parser": "^1.14.1",
     "bootstrap": "^3.3.5",
     "browserify": "^12.0.1",
+    "chai": "^3.4.1",
     "ecstatic": "^1.2.0",
+    "expect": "^1.12.2",
     "express": "^4.12.4",
     "foursquarevenues": "^2.0.0",
     "gulp": "^3.9.0",
+    "mocha": "^2.3.3",
     "nodemon": "^1.8.1",
     "partialify": "^3.1.5",
+    "passport": "^0.3.2",
     "path": "^0.12.7",
     "pg": "^4.4.3",
     "pg-hstore": "^2.3.2",
     "request": "^2.65.0",
     "rsvp": "^3.1.0",
     "sequelize": "^3.13.0",
+    "superagent": "^1.4.0",
     "watchify": "^3.6.0",
     "yelp": "^0.2.0"
   }
