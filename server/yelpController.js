@@ -1,11 +1,12 @@
 var trueReview = require('./postgres.js');
+var config = require('config');
 
 // See http://www.yelp.com/developers/documentation/v2/search_api
 var yelp = require("yelp").createClient({
-  consumer_key: ,
-  consumer_secret:,
-  token: ,
-  token_secret:
+  consumer_key: config.get("yelp.consumer_key"),
+  consumer_secret: config.get("yelp.consumer_secret"),
+  token: config.get("token"),
+  token_secret: config.get("token_secret")
 });
 
 var yelpController = {
