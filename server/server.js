@@ -2,7 +2,7 @@ var express = require('express');
 var app = express();
 var path = require('path');
 var yelpController = require('./yelpController');
-var dataController = require('./dataController');
+//var dataController = require('./dataController');
 var foursquareController = require('./foursquareController');
 var passport = require('passport');
 var uberStrategy = require('passport-uber');
@@ -36,7 +36,7 @@ passport.use(new uberStrategy(
   }
 ));
 
-// app.get('foursquare', foursquareController.getData);
+app.get('/data', yelpController.getData, foursquareController.getData);
 app.use(express.static(path.join(__dirname, './../client/')));
 app.use(bodyParser.urlencoded());
 app.use(passport.initialize());
