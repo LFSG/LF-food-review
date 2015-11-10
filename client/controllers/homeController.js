@@ -1,18 +1,8 @@
 var app = angular
-  .module('TrueFoodReview.HomeController',['ui.router'])
-  .controller('HomeController', ['$scope', HomeController])
+  .module('TrueFoodReview.HomeController',['ngRoute'])
+  .controller('TrueFoodReview', ['$scope', 'UberFactory', HomeController])
 
 
-function HomeController($scope) {
-  console.log('hello');
-  $scope.loadMap = function(){
-   console.log('hello');
-  	// map = new google.maps.Map(document.getElementById('map'), {
-   //  	center: {lat: -34.397, lng: 150.644},
-   //  	zoom: 8
-  	// });
+function HomeController($scope, UberFactory) {
 
-
-
-  };
 }

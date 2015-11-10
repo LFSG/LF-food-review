@@ -1,6 +1,8 @@
 var Sequelize = require('sequelize');
+var express = require('express');
+var config = require('config');
 
-var sequelize = new Sequelize('truereview', 'WillG', undefined, {
+var sequelize = new Sequelize(config.get('db.name'), config.get('db.user'), config.get('db.password'), {
   host: 'localhost',
   dialect: 'postgres'
 });
@@ -31,7 +33,7 @@ var FoursquareModel = sequelize.define('foursquare', {
 });
 
 sequelize.authenticate().then(function(err, data) {
-  console.log('Connected with PostgreSQL');
+  console.log('Connected with PostgreSQL on non-test');
 }).catch(function(err) {
   console.log(err.message);
 });
@@ -44,14 +46,14 @@ module.exports = {
     YelpModel.bulkCreate(data)
       .then(function() {
         console.log(`${modelName} was created!`);
-        next();  
+        next();
       });
   },
   fourSqDatabaseSync: function(data)  {
     FoursquareModel.bulkCreate(data)
       .then(function() {
         console.log(`${modelName} was created!`);
-        next();  
+        next();
       });
   },
   getTables: function(){
@@ -71,5 +73,4 @@ module.exports = {
         return val;
       });
   }
-
 };
