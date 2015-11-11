@@ -1,3 +1,48 @@
-<!-- <div class="main-container" ng-init="loadMap()">
-    <button ng-click="requestUber()">Call an uber</button>
-</div> -->
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <a class="navbar-brand" href="#">True Food Review</a>
+    </div>
+    <div class="collapse navbar-collapse" id="navbar-collapse-1">
+      <ul class="nav navbar-nav navbar-right">
+        <li>Uber</li>
+        <li class="dropdown">
+          <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="true">Dropdown <span class="caret"></span></a>
+            <ul class="dropdown-menu">
+              <li><a href="/data">Data</a></li>
+              <li><a href="/yelp">Yelp</a></li>
+              <li><a href="/foursquare">FourSquare</a></li>
+            </ul>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+
+<div ng-app='myApp'>
+
+  <div class="col-md-6">
+
+  </div>
+
+  <div ng-controller="MainController" class="container col-md-6" ui-view>
+
+    <ui-gmap-google-map center='map.center' zoom='map.zoom'>
+
+       <ui-gmap-marker coords="marker.coords" options="marker.options" events="marker.events" idkey="marker.id">
+        </ui-gmap-marker>
+
+       <ui-gmap-markers models="markers" coords="markers">
+       </ui-gmap-markers>
+
+    </ui-gmap-google-map>
+    <div>
+    <!-- <div ng-controller="uberController" ui-view> -->
+      <button ng-click="getPrices()"><img src="./client/assets/uber.png"/></button>
+      <ul>
+        <li ng-model="time">{{time}}</li>
+        <li ng-model="price">{{price}}</li>
+    </div>
+  </div>
+</div>
