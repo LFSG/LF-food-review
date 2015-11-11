@@ -6,39 +6,62 @@ var app = angular
 
 function MainController($scope, UberFactory, $http) {
   //Map stuff===============================================
-  $scope.map = {
-    center: { latitude: 33.979050, longitude: -118.422818 },
-    zoom: 10
+  $scope.lat = "0";
+  $scope.lng = "0";
+  $scope.accuracy = "0";
+  $scope.error = "";
+  $scope.model = { myMap: undefined };
+  $scope.myMarkers = [];
+
+  $scope.showResult = function () {
+      return $scope.error == "";
+  }
+
+  $scope.mapOptions = {
+      center: new google.maps.LatLng($scope.lat, $scope.lng),
+      zoom: 15,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
   };
-  $scope.options = {scrollwheel: false};
-  $scope.coordsUpdates = 0;
-  $scope.dynamicMoveCtr = 0;
-  $scope.marker = {
-    id: 0,
-    coords: {
-      latitude: 33.979050,
-      longitude: -118.422818
-    },
-    options: {
-      draggable: false
-    }
-  };
-  $scope.markers = [
-    {
-      id: 0,
-      coords: {
-        latitude: 33.979050,
-        longitude: -118.422818
+
+  $scope.showPosition = function (position) {
+      $scope.lat = position.coords.latitude;
+      $scope.lng = position.coords.longitude;
+      $scope.accuracy = position.coords.accuracy;
+      $scope.$apply();
+
+      var latlng = new google.maps.LatLng($scope.lat, $scope.lng);
+      $scope.model.myMap.setCenter(latlng);
+      $scope.myMarkers.push(new google.maps.Marker({ map: $scope.model.myMap, position: latlng }));
+  }
+
+  $scope.showError = function (error) {
+      switch (error.code) {
+          case error.PERMISSION_DENIED:
+              $scope.error = "User denied the request for Geolocation."
+              break;
+          case error.POSITION_UNAVAILABLE:
+              $scope.error = "Location information is unavailable."
+              break;
+          case error.TIMEOUT:
+              $scope.error = "The request to get user location timed out."
+              break;
+          case error.UNKNOWN_ERROR:
+              $scope.error = "An unknown error occurred."
+              break;
       }
-    },
-    {
-      id: 1,
-      coords: {
-        latitude: 34.979250,
-        longitude: -119.423818
+      $scope.$apply();
+  }
+
+  $scope.getLocation = function () {
+      if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition($scope.showPosition, $scope.showError);
       }
-    }
-  ];
+      else {
+          $scope.error = "Geolocation is not supported by this browser.";
+      }
+  }
+  $scope.getLocation();
+  
 //UBER STUFF =============================================
   $scope.productID = '';
   $scope.endLat = '';
