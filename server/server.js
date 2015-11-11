@@ -1,9 +1,9 @@
 var express = require('express');
 var app = express();
 var path = require('path');
-var yelpController = require('./yelpController');
-//var dataController = require('./dataController');
-var foursquareController = require('./foursquareController');
+var yelpController = require('./yelpController').getData;
+var dataController = require('./dataController');
+var foursquareController = require('./foursquareController').getData;
 var passport = require('passport');
 var uberStrategy = require('passport-uber');
 var config = require('config');
@@ -36,7 +36,6 @@ passport.use(new uberStrategy(
   }
 ));
 
-app.get('/data', yelpController.getData, foursquareController.getData);
 app.use(express.static(path.join(__dirname, './../client/')));
 app.use(bodyParser.urlencoded());
 app.use(passport.initialize());
@@ -45,8 +44,8 @@ app.get('/', function(req, res) {
   res.render('index.html');
 });
 //data endpoint to get merged data
-app.get('/data', function(req,res) {
-  res.send('ok');
+app.get('/data', yelpController, foursquareController, function(req,res) {
+  res.end();
 });
 
 //data endpoint to get yelp data

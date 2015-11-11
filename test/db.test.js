@@ -2,12 +2,11 @@ var chai = require('chai');
 var expect = chai.expect;
 var should = chai.should();
 var Sequelize = require("sequelize");
-var Model = require("./../server/postgres").model;
-var AddYelp = require("./../server/postgres").yelp;
-
+var YelpModel = require('./../server/postgres').yelpModel;
+var DatabaseSync = require("./../server/postgres").yelpDatabaseSync;
 //testing if can add yelp records to database
 
-describe("AddYelp", function () {
+describe("Yelp", function () {
   this.timeout(5000);
   var testData = [
       {
@@ -15,7 +14,7 @@ describe("AddYelp", function () {
       rating: 1,
       review_count: 1,
       lat: 1,
-      long: 1,
+      lon: 1,
       address: 'Real Street',
       city: 'LA',
       state: 'CA',
@@ -26,7 +25,7 @@ describe("AddYelp", function () {
     rating: 2,
     review_count: 2,
     lat: 2,
-    long: 2,
+    lon: 2,
     address: 'Fake Street',
     city: 'LA',
     state: 'CA',
@@ -35,8 +34,8 @@ describe("AddYelp", function () {
   ];
   //test to see if a record is being created.
   it("should create record", function (done) {
-      AddYelp(testData);
-      Model.find({
+      DatabaseSync(testData);
+      YelpModel.find({
         where: {address: testData[0].address}
       })
       .then(function(data){
@@ -46,14 +45,16 @@ describe("AddYelp", function () {
       });
   });
 
-  // it("should not have duplicate restaurants based on address", function(done) {
-  //   run Will function twice
-  //   Model.create(testData)
-  //   .then(Model.create(testData)
-  //   .then(
-  //   Model.count().then(function(count){
-  //     expect(count).to.eql(100);
-  //     done();
-  //   })));
-  // });
+  it("should not have duplicate restaurants based on address", function(done) {
+    DatabaseSync(testData);
+    DatabaseSync(testData);
+    YelpModel.find({
+      where: {address: testData[0].address}
+    })
+    .then(function(data){
+      console.log('HELLLLLLLLLOOOOOOOOO', data.address, testData[0].address);
+      expect(data.address).to.equal(testData[0].address);
+      done();
+    });
+  });
 });
