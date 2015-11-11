@@ -24,8 +24,7 @@ var app = angular
     'ui.router',
     'TrueFoodReview.HomeController',
     'uiGmapgoogle-maps'
-
-    ])
+    ]);
     // make map controller:
   .controller('mapController', ['$scope', function($scope) {
     $scope.map = { 
