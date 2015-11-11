@@ -4,8 +4,11 @@ var app = angular
     'TrueFoodReview.YelpFactory',
     'TrueFoodReview.UberFactory',
     'TrueFoodReview.MainController',
-    'uiGmapgoogle-maps'
+    'uiGmapgoogle-maps',
+    'ui.map',
+    'ui.event'
   ]);
+  
 app.config(configFunction);
 
 function configFunction($stateProvider, $urlRouterProvider) {

@@ -7,26 +7,63 @@ var app = angular
 
 function MainController($scope, UberFactory, YelpFactory, $http) {
   //Map stuff===============================================
-  $scope.map = {
-    center: { latitude: 33.979050, longitude: -118.422818 },
-    zoom: 10
-  };
-  $scope.options = { scrollwheel: false };
-  $scope.coordsUpdates = 0;
-  $scope.dynamicMoveCtr = 0;
-  $scope.marker = {
-    id: 0,
-    coords: {
-      latitude: 33.979050,
-      longitude: -118.422818
-    },
-    options: {
-      draggable: false
-    }
-  };
-  $scope.markers = [
+  $scope.lat = "0";
+  $scope.lng = "0";
+  $scope.accuracy = "0";
+  $scope.error = "";
+  $scope.model = { myMap: undefined };
+  $scope.myMarkers = [];
 
-  ];
+  $scope.showResult = function () {
+      return $scope.error == "";
+  }
+
+  $scope.mapOptions = {
+      center: new google.maps.LatLng($scope.lat, $scope.lng),
+      zoom: 15,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+  };
+
+  $scope.showPosition = function (position) {
+      $scope.lat = position.coords.latitude;
+      $scope.lng = position.coords.longitude;
+      $scope.accuracy = position.coords.accuracy;
+      $scope.$apply();
+
+      var latlng = new google.maps.LatLng($scope.lat, $scope.lng);
+      $scope.model.myMap.setCenter(latlng);
+      $scope.myMarkers.push(new google.maps.Marker({ map: $scope.model.myMap, position: latlng }));
+
+  }
+
+  $scope.showError = function (error) {
+      switch (error.code) {
+          case error.PERMISSION_DENIED:
+              $scope.error = "User denied the request for Geolocation."
+              break;
+          case error.POSITION_UNAVAILABLE:
+              $scope.error = "Location information is unavailable."
+              break;
+          case error.TIMEOUT:
+              $scope.error = "The request to get user location timed out."
+              break;
+          case error.UNKNOWN_ERROR:
+              $scope.error = "An unknown error occurred."
+              break;
+      }
+      $scope.$apply();
+  }
+
+  $scope.getLocation = function () {
+      if (navigator.geolocation) {
+          navigator.geolocation.getCurrentPosition($scope.showPosition, $scope.showError);
+      }
+      else {
+          $scope.error = "Geolocation is not supported by this browser.";
+      }
+  }
+  $scope.getLocation();
+  
 //UBER STUFF =============================================
   $scope.productID = '';
   $scope.endLat = '';
@@ -51,6 +88,7 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
   $scope.yelpState = '';
   $scope.yelpZip = '';
 
+
   $scope.getYelpLocations = function(){
     YelpFactory.getLocations().then(function (data) {
       var yelpData = data.data;
@@ -58,18 +96,21 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
       
       
       yelpData.forEach(function (elem, i) {
+       console.log(elem.lat, elem.lon);
+        // $scope.$apply();
+        var latlng = new google.maps.LatLng(elem.lat, elem.lon);
         var placeObj = {
+          map: $scope.model.myMap,
           idKey: yelpData[i].id,
-          coords: {
-            latitude: yelpData[i].lat.toString(),
-            longitude: yelpData[i].lon.toString()
-          },
+          position: latlng,
           name: yelpData[i].name
         }
-        $scope.markers.push(placeObj);
+        $scope.myMarkers.push(new google.maps.Marker({ , position: latlng }));
       })
+      console.log("scope.myMarkers = ", $scope.myMarkers);
 
-       console.log("scope.markers = ", $scope.markers);
+
+       
       // $scope.yelpLocations = temp;
       // $scope.marker.coords.latitude = yelpData[1].lat;
       // $scope.marker.coords.longitude = yelpData[1].lon;

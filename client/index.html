@@ -6,29 +6,30 @@
   <meta charset="UTF-8">
   <title>TrueFoodReview</title>
   <script type="text/javascript" src="./client/lib/angular/angular.min.js"></script>
-  <!-- <script type="text/javascript" src="./client/lib/angular-route/angular-route.min.js"></script> -->
   <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.js"></script>
-
   <script type="text/javascript" src="./client/factories/YelpFactory.js"></script>
+
+  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDI_64KA1ywM_tFnCa2s-SPB5RLcYVRZ4Q&callback=initMap"></script>
+
   <script type="text/javascript" src="./client/factories/UberFactory.js"></script>
   <script type="text/javascript" src="./client/controllers/MainController.js"></script>
-  <script src="./bower_components/angular-google-maps/dist/angular-google-maps.min.js"></script>
-  <script src="./bower_components/angular-simple-logger/dist/angular-simple-logger.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.10.1/lodash.min.js"></script>
-  <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDI_64KA1ywM_tFnCa2s-SPB5RLcYVRZ4Q&callback=initMap"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <script src="./bower_components/angular-simple-logger/dist/angular-simple-logger.min.js"></script>
+  <script src="./bower_components/angular-google-maps/dist/angular-google-maps.min.js"></script>
+  <!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script> -->
   <link rel="stylesheet" href="./node_modules/bootstrap/dist/css/bootstrap.min.css">
-  <script src="./node_modules/bootstrap/dist/js/bootstrap.min.js"></script>
   <link rel="stylesheet" type="text/css" href="./client/animate.css"/>
   <link rel="stylesheet" href="./node_modules/angular-material/angular-material.min.css"/>
   <link rel="stylesheet" href="./client/style.css"/>
   <script type="text/javascript" src="./client/app.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.15/angular-animate.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/angular_material/0.11.2/angular-material.min.js"></script>
+  <script type="text/javascript" src="./../bower_components/angular-ui-event/dist/event.min.js"></script>
+  <script type="text/javascript" src="./../bower_components/angular-ui-map/ui-map.js"></script>
 </head>
 
 <body ng-app='myApp'>
-
-  <div class="container" ui-view>
-  </div>
+  <div class="container" ui-view></div>
 ​
 </body>
 </html>
