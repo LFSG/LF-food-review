@@ -9,7 +9,10 @@ var uberStrategy = require('passport-uber');
 var config = require('config');
 var bodyParser = require('body-parser');
 var request = require('request');
+
+var findYelpData = require('./findYelpData');
 var uberURL= 'https://sandbox-api.uber.com/v1/';
+
 
 var ACCESSTOKEN;
 
@@ -41,18 +44,17 @@ app.use(express.static(path.join(__dirname, './../')));
 app.use(bodyParser.urlencoded());
 app.use(passport.initialize());
 app.use(passport.session());
-app.get('/', function(req, res) {
+app.get('/', yelpController, foursquareController, function(req, res) {
   res.sendFile(path.join(__dirname, '../client/index.html'));
 });
 //data endpoint to get merged data
-app.get('/data', yelpController, foursquareController, function(req,res) {
+app.get('/data', function(req,res) {
   res.end();
 });
 
 //data endpoint to get yelp data
-app.get('/yelp', function(req,res) {
-  res.send('ok');
-});
+app.get('/yelp', findYelpData);
+
 
 // endpoint to make requests to uber
 app.get('/uber', function(req, res) {
