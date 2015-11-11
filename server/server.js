@@ -36,12 +36,12 @@ passport.use(new uberStrategy(
   }
 ));
 
-app.use(express.static(path.join(__dirname, './../client/')));
+app.use(express.static(path.join(__dirname, './../')));
 app.use(bodyParser.urlencoded());
 app.use(passport.initialize());
 app.use(passport.session());
 app.get('/', function(req, res) {
-  res.render('index.html');
+  res.sendFile(path.join(__dirname, '../client/index.html'));
 });
 //data endpoint to get merged data
 app.get('/data', yelpController, foursquareController, function(req,res) {
@@ -53,15 +53,18 @@ app.get('/yelp', function(req,res) {
   res.send('ok');
 });
 
-//endpoint to make requests to uber
-// app.get('/uber', function(req,res) {
-//   request({url:GOES HERE, function (error, response, body) {
-//     if (!error && response.statusCode == 200) {
-//       var activitiesRes = JSON.parse(body);
-//       activitiesRes.forEach(obj => migrateActivities.syncFunction(obj));
-//       migrateActivities.updateAverage(activitiesRes[0]);
-//     }
-// });
+// endpoint to make requests to uber
+app.get('/uber', function(req,res) {
+  request({url:
+    `https://api.uber.com/v1/estimates/price?start_latitude=33.979050&start_longitude=-118.422818&end_latitude=34.06261462&end_longitude=-118.34798813&server_token=${config.get("uber.serverToken")}`,
+    function (error, response, body) {
+      if (!error && response.statusCode == 200) {
+        var estimates = JSON.parse(body);
+        console.log(estimates);
+      }
+    }
+  });
+});
 
 //data endpoint to get foursquare data
 app.get('/foursquare', function(req,res) {
@@ -72,7 +75,7 @@ app.get('/auth/uber',
   passport.authenticate('uber'));
 
 app.get('/auth/uber/callback',
-  passport.authenticate('uber', { failureRedirect: '/data' }),
+  passport.authenticate('uber', { failureRedirect: '/fail' }),
   function(req, res) {
     // Successful authentication, redirect home.
     res.redirect('/');
