@@ -12,6 +12,7 @@ var fourSquareController = {
 				console.log(error);
 			}
 			var stats = JSON.parse(data).response.groups[0].items;
+			// console.log(stats.venue.location);
 			var restaurants = stats.map(function(stat) {
 				return {
 					name: stat.venue.name,
@@ -19,13 +20,14 @@ var fourSquareController = {
 					review_count: stat.venue.ratingSignals,
 					lat: stat.venue.location.lat,
 					lon: stat.venue.location.lon,
-					address: stat.venue.location.address[0],
+					address: stat.venue.location.address,
 					city: stat.venue.location.city,
 					state: stat.venue.location.state,
 					postal_code: stat.venue.location.postalCode
 			 	};
 			});
 			trueReview.fourSqDatabaseSync(restaurants, 'FoursquareModel');
+			next();
 		});
 	}
 };

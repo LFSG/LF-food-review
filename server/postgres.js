@@ -8,20 +8,8 @@ var sequelize = new Sequelize(config.get('db.name'), config.get('db.user'), conf
 });
 
 // HERE'S THE ONE TABLE WITH ALL DATA
-var YelpModel = sequelize.define('yelp', {
-  name: {type: Sequelize.STRING},
-  rating: {type: Sequelize.FLOAT},
-  review_count: {type: Sequelize.INTEGER},
-  lat: {type: Sequelize.FLOAT},
-  lon: {type: Sequelize.FLOAT},
-  address: {type: Sequelize.STRING, unique: true},
-  city: {type: Sequelize.STRING},
-  state: {type: Sequelize.STRING},
-  postal_code: {type: Sequelize.INTEGER}
-});
-
-var FoursquareModel = sequelize.define('foursquare', {
-  name: {type: Sequelize.STRING},
+var YelpModel = sequelize.define('yelps', {
+  name: {type: Sequelize.STRING, unique: true},
   rating: {type: Sequelize.FLOAT},
   review_count: {type: Sequelize.INTEGER},
   lat: {type: Sequelize.FLOAT},
@@ -29,7 +17,19 @@ var FoursquareModel = sequelize.define('foursquare', {
   address: {type: Sequelize.STRING},
   city: {type: Sequelize.STRING},
   state: {type: Sequelize.STRING},
-  postal_code: {type: Sequelize.INTEGER}
+  postal_code: {type: Sequelize.STRING}
+});
+
+var FoursquareModel = sequelize.define('foursquare', {
+  name: {type: Sequelize.STRING, unique: true},
+  rating: {type: Sequelize.FLOAT},
+  review_count: {type: Sequelize.INTEGER},
+  lat: {type: Sequelize.FLOAT},
+  lon: {type: Sequelize.FLOAT},
+  address: {type: Sequelize.STRING},
+  city: {type: Sequelize.STRING},
+  state: {type: Sequelize.STRING},
+  postal_code: {type: Sequelize.STRING}
 });
 
 sequelize.authenticate().then(function(err, data) {
@@ -41,36 +41,17 @@ sequelize.authenticate().then(function(err, data) {
 sequelize.sync();
 
 module.exports = {
+  yelpModel: YelpModel,
+  foursquareModel: FoursquareModel,
   yelpDatabaseSync: function(data)  {
-    console.log(data);
-    YelpModel.bulkCreate(data)
-      .then(function() {
-        console.log(`${modelName} was created!`);
-        next();
-      });
+    // console.log(data);
+    data.forEach(function(elem, i) {
+      YelpModel.create(elem);
+    });
   },
   fourSqDatabaseSync: function(data)  {
-    FoursquareModel.bulkCreate(data)
-      .then(function() {
-        console.log(`${modelName} was created!`);
-        next();
+    data.forEach(function(elem, i) {
+      FoursquareModel.create(elem);
       });
   },
-  getTables: function(){
-    var yelp = YelpModel
-      .findAll()
-      .then(function(yelpData){
-          return yelpData;
-      });
-    var fourSq = FoursquareModel
-      .findAll()
-      .then(function(fourSqData){
-        return fourSqData;
-      });
-    Promise.all([yelp, fourSq])
-      .then(function(val) {
-        console.log(val);
-        return val;
-      });
-  }
 };
