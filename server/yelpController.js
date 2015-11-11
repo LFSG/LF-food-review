@@ -5,8 +5,8 @@ var config = require('config');
 var yelp = require("yelp").createClient({
   consumer_key: config.get("yelp.consumer_key"),
   consumer_secret: config.get("yelp.consumer_secret"),
-  token: config.get("token"),
-  token_secret: config.get("token_secret")
+  token: config.get("yelp.token"),
+  token_secret: config.get("yelp.token_secret")
 });
 
 var yelpController = {

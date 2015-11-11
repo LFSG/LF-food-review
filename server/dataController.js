@@ -2,7 +2,7 @@ var trueReview = require('./postgres.js');
 var Sequelize = require('sequelize');
 var Promise = require('bluebird');
 
-var sequelize = new Sequelize('foodreview', 'student', 'ilovetesting', {
+var sequelize = new Sequelize('foodreview', 'WillG', 'ilovetesting', {
   host: 'localhost',
   dialect: 'postgres'
 });

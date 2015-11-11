@@ -32,6 +32,7 @@
     "nodemon": "^1.8.1",
     "partialify": "^3.1.5",
     "passport": "^0.3.2",
+    "passport-uber": "0.0.1",
     "path": "^0.12.7",
     "pg": "^4.4.3",
     "pg-hstore": "^2.3.2",
