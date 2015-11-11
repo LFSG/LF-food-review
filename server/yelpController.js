@@ -20,6 +20,7 @@ var yelpController = {
           console.log(error);
         }
         var restaurants = data.businesses.map(function(item){
+          // console.log(item);
           return {
             name: item.name,
             rating: item.rating,
@@ -32,10 +33,11 @@ var yelpController = {
             postal_code: item.location.postal_code
           };
         });
-        trueReview.getTables();
-        //trueReview.yelpDatabaseSync(restaurants, 'YelpModel');
+        // console.log(restaurants);
+        trueReview.yelpDatabaseSync(restaurants);
     });
+    next();
   } // closes getData
-} // closes scrapeController
+}; // closes scrapeController
 
 module.exports = yelpController;
