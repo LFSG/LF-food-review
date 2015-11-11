@@ -1,29 +1,10 @@
-var lat;
-var longi;
-
-// Grab the user's geolocation
-navigator.geolocation.getCurrentPosition(function(pos) {
-      lat = pos.coords.latitude;
-      longi = pos.coords.longitude;
-
-      // longi = pos.coords.longitude;
-      // $scope.map.setCenter(new google.maps.LatLng(pos.coords.latitude, pos.coords.longitude));
-      // $scope.loading.hide();
-
-      console.log("latitude: " +lat);
-      console.log("longitude: " +longi);
-
-    }, function(error) {
-        console.log(error.message);
-      });
-
-
-
 var app = angular
   .module('myApp',[
     'ui.router',
-    'TrueFoodReview.HomeController',
+    'TrueFoodReview.UberFactory',
+    'TrueFoodReview.MainController',
     'uiGmapgoogle-maps'
+<<<<<<< HEAD
     ]);
     // make map controller:
   .controller('mapController', ['$scope', function($scope) {
@@ -66,15 +47,17 @@ var app = angular
 
 // $scope.map = { center: { latitude: 45, longitude: -73 }, zoom: 8 };
 
+=======
+  ]);
+>>>>>>> 246c427a6ef6e84a116f460b5d5b3a2174bbea93
 app.config(configFunction);
 
 function configFunction($stateProvider, $urlRouterProvider) {
-
+  $urlRouterProvider.otherwise('/home');
   $stateProvider
-    .state('state1', {
-      url: '/',
-      templateUrl: './partials/home.html',
-      controller: 'HomeController'
+    .state('home', {
+      url: "/home",
+      templateUrl: './client/partials/home.html',
+      controller: 'MainController'
     });
-
 }
