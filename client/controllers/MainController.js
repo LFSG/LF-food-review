@@ -2,15 +2,16 @@
 
 var app = angular
   .module('TrueFoodReview.MainController',['ui.router'])
-  .controller('MainController', ['$scope', 'UberFactory', '$http', MainController])
+  .controller('MainController', ['$scope', 'UberFactory', 'YelpFactory', '$http', MainController]);
+  
 
-function MainController($scope, UberFactory, $http) {
+function MainController($scope, UberFactory, YelpFactory, $http) {
   //Map stuff===============================================
   $scope.map = {
     center: { latitude: 33.979050, longitude: -118.422818 },
     zoom: 10
   };
-  $scope.options = {scrollwheel: false};
+  $scope.options = { scrollwheel: false };
   $scope.coordsUpdates = 0;
   $scope.dynamicMoveCtr = 0;
   $scope.marker = {
@@ -24,20 +25,7 @@ function MainController($scope, UberFactory, $http) {
     }
   };
   $scope.markers = [
-    {
-      id: 0,
-      coords: {
-        latitude: 33.979050,
-        longitude: -118.422818
-      }
-    },
-    {
-      id: 1,
-      coords: {
-        latitude: 34.979250,
-        longitude: -119.423818
-      }
-    }
+
   ];
 //UBER STUFF =============================================
   $scope.productID = '';
@@ -52,4 +40,47 @@ function MainController($scope, UberFactory, $http) {
       $scope.productID = data.prices.product_id;
     });
   }
+
+  //YELP STUFF =============================================
+  $scope.yelpLocations;
+  $scope.yelpName = '';
+  $scope.yelpRating = '';
+  $scope.yelpReviewCount = '';
+  $scope.yelpAddress = '';
+  $scope.yelpCity = '';
+  $scope.yelpState = '';
+  $scope.yelpZip = '';
+
+  $scope.getYelpLocations = function(){
+    YelpFactory.getLocations().then(function (data) {
+      var yelpData = data.data;
+      // console.log( 'yelp data is ', yelpData);
+      
+      
+      yelpData.forEach(function (elem, i) {
+        var placeObj = {
+          idKey: yelpData[i].id,
+          coords: {
+            latitude: yelpData[i].lat.toString(),
+            longitude: yelpData[i].lon.toString()
+          },
+          name: yelpData[i].name
+        }
+        $scope.markers.push(placeObj);
+      })
+
+       console.log("scope.markers = ", $scope.markers);
+      // $scope.yelpLocations = temp;
+      // $scope.marker.coords.latitude = yelpData[1].lat;
+      // $scope.marker.coords.longitude = yelpData[1].lon;
+
+    })
+  }
+
+
 }
+
+
+
+
+

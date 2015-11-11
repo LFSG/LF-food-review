@@ -47,10 +47,13 @@ app.use(passport.session());
 app.get('/', yelpController, foursquareController, function(req, res) {
   res.sendFile(path.join(__dirname, '../client/index.html'));
 });
+
+
 //data endpoint to get merged data
 app.get('/data', function(req,res) {
   res.end();
 });
+
 
 //data endpoint to get yelp data
 app.get('/yelp', findYelpData);
