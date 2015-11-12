@@ -1,13 +1,13 @@
 .angular-google-map-container { height: 400px; }
 
-#map {
+/*#map {
     width: 800px;
     height: 725px;
  	margin-right: auto;
  	margin-left: auto;
     text-align: center;
 ​
-}
+}*/
 
 #googft-legend {
   position: relative;
@@ -45,10 +45,20 @@
 	height: 40px;
 }
 
+
 .uberButton {
   font-size: 28px;
   font-weight: bold;
   font-family: 'helvetica', 'sans-serif';
   margin-top: 5px;
   display: block;
+}
+.yelpListItem {
+	cursor: pointer;
+	margin-top: 10px;
+	background-color: turquoise;
+}
+
+.yelpId {
+	color: #fff;
 }

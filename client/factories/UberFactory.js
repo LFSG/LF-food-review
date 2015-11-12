@@ -14,6 +14,7 @@ function UberFactory($http){
       end_latitude: lat,
       end_longitude: lon
     };
+    console.log(coordinates);
     coordinates = JSON.stringify(coordinates);
     return $http.post('/uber', coordinates);
   };
@@ -27,5 +28,17 @@ function UberFactory($http){
     data = JSON.stringify(data);
     return $http.post('/callacar', data);
   };
+  uberRequest.geolocate = function() {
+    navigator.geolocation.getCurrentPosition(function(pos) {
+      lat = pos.coords.latitude;
+      longi = pos.coords.longitude;
+      console.log("latitude: " +lat);
+      console.log("longitude: " +longi);
+      uberRequest.lat = lat;
+      uberRequest.lon = longi;
+    },function(error) {
+        console.log(error.message);
+      });
+  }
   return uberRequest;
 }
