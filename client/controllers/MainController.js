@@ -37,7 +37,7 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
 
       var latlng = new google.maps.LatLng($scope.lat, $scope.lng);
       $scope.model.myMap.setCenter(latlng);
-      $scope.myMarkers.push(new google.maps.Marker({ map: $scope.model.myMap, position: latlng}));
+      $scope.myMarkers.push(new google.maps.Marker({ map: $scope.model.myMap, position: latlng, icon: 'http://maps.google.com/mapfiles/ms/icons/green-dot.png'}));
 
   };
 
@@ -73,15 +73,14 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
   // YELP STUFF =============================================
   $scope.yelpLocations = [];
   $scope.markerClick;
-  $scope.selectedLocation = 'hey';
+  // $scope.selectedLocation = 'hey';
   // var infowindow;
 
   // Functions to make markers bounce upon mouseover of name *******
   $scope.bounceStart = function () {
   // var index = this.index
-    console.log(this.location[0]);
+    // console.log(this.location[0]);
     for(var i = 0; i < $scope.myMarkers.length; i++) {
-      // console.log(this.location[0]);
       if(this.location[0] === $scope.myMarkers[i].title){
         $scope.myMarkers[i].setAnimation(google.maps.Animation.BOUNCE);
       }     
@@ -89,7 +88,6 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
   }
 
   $scope.bounceStop = function () {
-    // console.log(this.location[0]);
     for(var i = 0; i < $scope.myMarkers.length; i++) {
       // console.log(this.location[0]);
       if(this.location[0] === $scope.myMarkers[i].title){
@@ -105,7 +103,7 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
   $scope.getYelpLocations = function(){
     YelpFactory.getLocations().then(function (data) {
       var yelpData = data.data;
-      // console.log( 'yelp data is ', yelpData);
+      console.log(yelpData);
       $scope.model.myMap = new google.maps.Map(document.getElementById('map'), $scope.mapOptions);
       $scope.getLocation();
 
@@ -120,6 +118,7 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
           position: latlng,
           latitude: elem.lat,
           longitude: elem.lon,
+          rating: elem.rating,
           map: $scope.model.myMap,
           idKey: yelpData[i].id,
           title: yelpData[i].name,
@@ -130,7 +129,8 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
         // create content for info windows ***************************
 
         var infoContent ='<span class="infoBold">' +yelpData[i].name + '</span><br>' + yelpData[i].address
-                          +'<br><span class="infoUnderline">Rating</span>: ' + yelpData[i].rating;
+                          +'<br><span class="infoUnderline">Rating</span>: ' + yelpData[i].rating
+                          +'<br><span class="infoUnderline">Reviews</span>: ' + yelpData[i].review_count
 
 
         // create markers and info windows ***************************   
@@ -160,22 +160,28 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
 
         // push markers to myMarker array, and locations and names to yelpLocations array
 
+        var listContent = [placeObj.title, placeObj.rating];
+
         $scope.myMarkers.push(marker);
-        $scope.yelpLocations.push([placeObj.title, placeObj.idKey]);
+        $scope.yelpLocations.push(listContent);
 
       });
 
-      // $scope.markerClick = function () {
-      //    for(var i = 0; i < $scope.myMarkers.length; i++) {
-      //     // console.log(this.location[0]);
-      //     var infowindow = new google.maps.InfoWindow({
-      //       content: yelpData[i].name + '<br>' + yelpData[i].address 
-      //     });
-      //     if(this.location[0] === $scope.myMarkers[i].title){
-      //       infowindow.open($scope.model.myMap, $scope.myMarkers[i]);
-      //     }
-      //   }
-      // }
+      $scope.markerClick = function () {
+         for(var i = 0; i < $scope.myMarkers.length; i++) {
+          console.log(this.location[0]);
+          var infowindow = new google.maps.InfoWindow({
+            content: '<span class="infoBold">' +yelpData[i].name + '</span><br>' + yelpData[i].address
+                          +'<br><span class="infoUnderline">Rating</span>: ' + yelpData[i].rating
+                          +'<br><span class="infoUnderline">Reviews</span>: ' + yelpData[i].review_count
+          });
+          if(this.location[0] === $scope.myMarkers[i].title){
+            infowindow.open($scope.model.myMap, $scope.myMarkers[i]);
+            $scope.myMarkers[i].setAnimation(null);
+
+          }
+        }
+      }
 
     });
   };

@@ -58,10 +58,24 @@
   margin-top: 5px;
   display: block;
 }
+
+.listContainer {
+    height: 800px;
+    width: 450px;
+    text-align: center;
+}
+
 .yelpListItem {
 	cursor: pointer;
 	margin-top: 10px;
 	background-color: turquoise;
+	padding: 5px;
+	width: 225px;
+	margin: auto;
+	margin-bottom: 5px;
+	border-bottom: solid #000 1px;
+	border-top: solid #000 1px;
+
 }
 
 .yelpId {
