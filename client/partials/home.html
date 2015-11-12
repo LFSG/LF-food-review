@@ -24,7 +24,7 @@
   <div ng-controller="MainController" class="col-md-6">
       <button ng-click="getYelpLocations()">Get Yelp Data</button>
       <div ng-repeat="location in yelpLocations">
-        <div class="yelpListItem">
+        <div class="yelpListItem animated bounceInDown" ng-mouseover="bounceStart()" ng-mouseLeave="bounceStop()" ng-click="markerClick()">
           {{location[0]}}
           <div class='yelpId'>
             {{location[1]}}

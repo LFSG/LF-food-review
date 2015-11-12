@@ -7,7 +7,7 @@ var app = angular
   .controller('MainController', ['$scope', 'UberFactory', 'YelpFactory', '$http', MainController]);
 
 
-function MainController($scope, UberFactory, YelpFactory, $http) {
+function MainController($scope, UberFactory, YelpFactory, $http) { 
   //Map stuff===============================================
   $scope.lat = "0";
   $scope.lng = "0";
@@ -24,7 +24,7 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
 
   $scope.mapOptions = {
       center: new google.maps.LatLng($scope.lat, $scope.lng),
-      zoom: 15,
+      zoom: 14,
       mapTypeId: google.maps.MapTypeId.ROADMAP,
       clickable: true
   };
@@ -72,14 +72,33 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
 
   //YELP STUFF =============================================
   $scope.yelpLocations = [];
-  $scope.yelpName = '';
-  $scope.yelpRating = '';
-  $scope.yelpReviewCount = '';
-  $scope.yelpAddress = '';
-  $scope.yelpCity = '';
-  $scope.yelpState = '';
-  $scope.yelpZip = '';
-  $scope.yelpData
+  $scope.markerClick;
+  // var infowindow;
+
+  $scope.bounceStart = function () {
+  // var index = this.index
+    console.log(this.location[0]);
+    for(var i = 0; i < $scope.myMarkers.length; i++) {
+      // console.log(this.location[0]);
+      if(this.location[0] === $scope.myMarkers[i].title){
+        $scope.myMarkers[i].setAnimation(google.maps.Animation.BOUNCE);
+      }     
+    }
+  }
+
+  $scope.bounceStop = function () {
+    // console.log(this.location[0]);
+    for(var i = 0; i < $scope.myMarkers.length; i++) {
+      // console.log(this.location[0]);
+      if(this.location[0] === $scope.myMarkers[i].title){
+        $scope.myMarkers[i].setAnimation(null);
+      }
+    }
+  }
+
+
+  //Functions to make markers bounce upon mouseover of name
+
 
 
   $scope.getYelpLocations = function(){
@@ -103,9 +122,12 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
           animation: google.maps.Animation.DROP
         };
 
+        var infoContent = yelpData[i].name + '<br>' + yelpData[i].address
+                          +'<br>' + yelpData[i].rating;
+
         var marker = new google.maps.Marker(placeObj);
         var infowindow = new google.maps.InfoWindow({
-          content: yelpData[i].name
+          content: yelpData[i].name + '<br>' + yelpData[i].address
         });
 
         google.maps.event.addListener(marker, 'click', function(event) {
@@ -120,16 +142,30 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
         });
 
 
+
         $scope.myMarkers.push(marker);
         $scope.yelpLocations.push([placeObj.title, placeObj.idKey]);
 
+
       });
 
-      console.log("scope.myMarkers = ", $scope.myMarkers[0]);
+      // $scope.markerClick = function () {
+      //    for(var i = 0; i < $scope.myMarkers.length; i++) {
+      //     // console.log(this.location[0]);
+      //     var infowindow = new google.maps.InfoWindow({
+      //       content: yelpData[i].name + '<br>' + yelpData[i].address 
+      //     });
+      //     if(this.location[0] === $scope.myMarkers[i].title){
+      //       infowindow.open($scope.model.myMap, $scope.myMarkers[i]);
+      //     }
+      //   }
+      // }
 
 
     });
   };
+
+
 
   //UBER STUFF =============================================
     //coordinates of selected restaurant**********************
