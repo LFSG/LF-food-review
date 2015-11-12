@@ -19,6 +19,7 @@
     "angular-route": "~1.4.7",
     "rsvp.js": "rsvp#~3.1.0",
     "angular-google-maps": "~2.2.1",
-    "angular-ui-map": "~0.5.0"
+    "angular-ui-map": "~0.5.0",
+    "angular-ui-event": "~1.0.0"
   }
 }

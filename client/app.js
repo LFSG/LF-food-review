@@ -1,6 +1,7 @@
 var app = angular
   .module('myApp',[
     'ui.router',
+    'TrueFoodReview.YelpFactory',
     'TrueFoodReview.UberFactory',
     'TrueFoodReview.MainController',
     'uiGmapgoogle-maps',

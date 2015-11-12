@@ -2,15 +2,20 @@
 
 var app = angular
   .module('TrueFoodReview.MainController',['ui.router'])
-  .controller('MainController', ['$scope', 'UberFactory', '$http', MainController])
+  .controller('MainController', ['$scope', 'UberFactory', 'YelpFactory', '$http', MainController]);
+  
 
-function MainController($scope, UberFactory, $http) {
+function MainController($scope, UberFactory, YelpFactory, $http) {
   //Map stuff===============================================
   $scope.lat = "0";
   $scope.lng = "0";
   $scope.accuracy = "0";
   $scope.error = "";
   $scope.model = { myMap: undefined };
+  $scope.locationsList = [];
+  $scope.uberLat;
+  $scope.uberLng;
+
   $scope.myMarkers = [];
 
   $scope.showResult = function () {
@@ -20,7 +25,8 @@ function MainController($scope, UberFactory, $http) {
   $scope.mapOptions = {
       center: new google.maps.LatLng($scope.lat, $scope.lng),
       zoom: 15,
-      mapTypeId: google.maps.MapTypeId.ROADMAP
+      mapTypeId: google.maps.MapTypeId.ROADMAP,
+      clickable: true
   };
 
   $scope.showPosition = function (position) {
@@ -31,7 +37,8 @@ function MainController($scope, UberFactory, $http) {
 
       var latlng = new google.maps.LatLng($scope.lat, $scope.lng);
       $scope.model.myMap.setCenter(latlng);
-      $scope.myMarkers.push(new google.maps.Marker({ map: $scope.model.myMap, position: latlng }));
+      $scope.myMarkers.push(new google.maps.Marker({ map: $scope.model.myMap, position: latlng}));
+
   }
 
   $scope.showError = function (error) {
@@ -75,4 +82,66 @@ function MainController($scope, UberFactory, $http) {
       $scope.productID = data.prices.product_id;
     });
   }
+
+  //YELP STUFF =============================================
+  $scope.yelpLocations = [];
+  $scope.yelpName = '';
+  $scope.yelpRating = '';
+  $scope.yelpReviewCount = '';
+  $scope.yelpAddress = '';
+  $scope.yelpCity = '';
+  $scope.yelpState = '';
+  $scope.yelpZip = '';
+  $scope.yelpData
+
+
+  $scope.getYelpLocations = function(){
+    YelpFactory.getLocations().then(function (data) {
+      var yelpData = data.data;
+      // console.log( 'yelp data is ', yelpData);
+      $scope.model.myMap = new google.maps.Map(document.getElementById('map'), $scope.mapOptions)
+      $scope.getLocation();
+      
+      yelpData.forEach(function (elem, i) {
+       // console.log(elem.lat, elem.lon);
+        var latlng = new google.maps.LatLng(elem.lat, elem.lon);
+
+        var placeObj = {
+          position: latlng,
+          latitude: elem.lat,
+          longitude: elem.lon,
+          map: $scope.model.myMap,
+          idKey: yelpData[i].id,
+          title: yelpData[i].name,
+          animation: google.maps.Animation.DROP
+        }
+
+        var marker = new google.maps.Marker(placeObj);
+        var infowindow = new google.maps.InfoWindow({
+          content: yelpData[i].name
+        })
+
+        google.maps.event.addListener(marker, 'click', function(event) {
+          infowindow.open($scope.model.myMap, marker)
+          $scope.endLat = elem.lat;
+          $scope.endLong = elem.lon;
+          console.log(event, elem.id);
+        })
+
+        google.maps.event.addListener($scope.model.myMap, 'click', function(event) {
+          infowindow.close();
+        })
+        
+
+        $scope.myMarkers.push(marker);
+        $scope.yelpLocations.push([placeObj.title, placeObj.idKey]);
+
+      })
+
+      console.log("scope.myMarkers = ", $scope.myMarkers[0]);
+
+
+    })
+  };
+
 }

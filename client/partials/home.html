@@ -22,12 +22,25 @@
 
 <div ng-app='myApp'>
 
-  <div class="col-md-6">
-
+  <div ng-controller="MainController" class="col-md-6">
+      <button ng-click="getYelpLocations()">Get Yelp Data</button>
+      <div ng-repeat="location in yelpLocations">
+        <div class="yelpListItem">
+          {{location[0]}}
+          <div class='yelpId'>
+            {{location[1]}}
+          </div>
+        </div>
+      </div>
   </div>
 
   <div ng-controller="MainController" class="container col-md-6" ui-view>
-    <div ui-map="model.myMap" class="angular-google-map-container" ui-options="mapOptions"></div>
+
+    <div id="map" ui-map="model.myMap" class="angular-google-map-container" ui-options="mapOptions"></div>
+    
+    <div ng-repeat="marker in myMarkers" ui-map-marker="myMarker[$index]">
+    </div>
+
     <div>
     <!-- <div ng-controller="uberController" ui-view> -->
       <button ng-click="getPrices()"><img src="./client/assets/uber.png"/></button>

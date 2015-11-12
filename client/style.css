@@ -1,13 +1,13 @@
 .angular-google-map-container { height: 400px; }
 
-#map {
+/*#map {
     width: 800px;
     height: 725px;
  	margin-right: auto;
  	margin-left: auto;
     text-align: center;
 ​
-}
+}*/
 
 #googft-legend {
   position: relative;
@@ -43,4 +43,14 @@
 	margin-top: 0px;
 	margin-bottom: 0px;
 	height: 40px;
+}
+
+.yelpListItem {
+	cursor: pointer;
+	margin-top: 10px;
+	background-color: turquoise;
+}
+
+.yelpId {
+	color: #fff;
 }
