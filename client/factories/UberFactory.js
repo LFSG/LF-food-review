@@ -4,11 +4,29 @@ var app = angular
 
 function UberFactory($http){
   var uberRequest = {};
+  //direct the user to oAuth into Uber to use the features
   uberRequest.auth = function() {
-    return $http.get('http://localhost:3000/auth/uber');
+    return $http.get('http://127.0.0.1:3000/auth/uber');
   };
-  uberRequest.prices = function() {
-    return $http.get('http://localhost:3000/uber');
+  //will return a promise that then contains price estimate object from Uber
+  uberRequest.prices = function(lat, lon) {
+    var coordinates = {
+      end_latitude: lat,
+      end_longitude: lon
+    };
+    console.log(coordinates);
+    coordinates = JSON.stringify(coordinates);
+    return $http.post('/uber', coordinates);
+  };
+  //will return a promise that will call a car for the user
+  uberRequest.callACar = function(lat, lon, id) {
+    var data = {
+      end_latitude: lat,
+      end_longitude: lon,
+      product_id: id
+    };
+    data = JSON.stringify(data);
+    return $http.post('/callacar', data);
   };
   uberRequest.geolocate = function() {
     navigator.geolocation.getCurrentPosition(function(pos) {
@@ -21,15 +39,6 @@ function UberFactory($http){
     },function(error) {
         console.log(error.message);
       });
-  } 
+  }
   return uberRequest;
 }
-
-  // messageUpdate.post = function(message,name){
-  //   var data = {
-  //     message: message,
-  //     created_by: name
-  //   }
-  //   data = JSON.stringify(data);
-  //   $http.post('http://slack-server.elasticbeanstalk.com/messages',data)
-  // }

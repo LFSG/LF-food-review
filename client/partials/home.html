@@ -21,7 +21,6 @@
 
 
 <div ng-app='myApp'>
-
   <div ng-controller="MainController" class="col-md-6">
       <button ng-click="getYelpLocations()">Get Yelp Data</button>
       <div ng-repeat="location in yelpLocations">
@@ -33,20 +32,21 @@
         </div>
       </div>
   </div>
-
   <div ng-controller="MainController" class="container col-md-6" ui-view>
-
+<!-- Map related HTML -->
     <div id="map" ui-map="model.myMap" class="angular-google-map-container" ui-options="mapOptions"></div>
-    
+<!-- Sidebar of Restaurant Data -->
     <div ng-repeat="marker in myMarkers" ui-map-marker="myMarker[$index]">
     </div>
-
+<!-- Uber related HTML -->
     <div>
-    <!-- <div ng-controller="uberController" ui-view> -->
-      <button ng-click="getPrices()"><img src="./client/assets/uber.png"/></button>
-      <ul>
-        <li ng-model="time">{{time}}</li>
-        <li ng-model="price">{{price}}</li>
+      <a ng-hide="cookie" href="/auth/uber" class="uberButton"><button><img src="./client/assets/uber_badge.png"/> Log In</button></a>
+      <button class="uberButton" ng-show="cookie" ng-click="getPrices()"><img src="./client/assets/uber_badge.png"/> Estimated Cost to Selected Restaurant</button>
+      <ul ng-show="toggle">
+        <li ng-show="time">The estimated travel time is {{time}} minutes.</li>
+        <li ng-show="distance">The restaurant is {{distance}} miles away.</lis>
+        <li ng-repeat="key in price" ng-click=requestRide(key.product_id)><button>{{key.display_name}}: {{key.estimate}}</button></li>
+      </ul>
     </div>
   </div>
 </div>
