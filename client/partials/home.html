@@ -42,6 +42,7 @@
     <div>
       <a ng-hide="cookie" href="/auth/uber" class="uberButton"><button><img src="./client/assets/uber_badge.png"/> Log In</button></a>
       <button class="uberButton" ng-show="cookie" ng-click="getPrices()"><img src="./client/assets/uber_badge.png"/> Estimated Cost to Selected Restaurant</button>
+      <div ng-bind="incoming">{{incoming}}</div>
       <ul ng-show="toggle">
         <li ng-show="time">The estimated travel time is {{time}} minutes.</li>
         <li ng-show="distance">The restaurant is {{distance}} miles away.</lis>

@@ -9,19 +9,14 @@ var passport = require('passport');
 var uberStrategy = require('passport-uber');
 var config = require('config');
 var bodyParser = require('body-parser');
+var cookieParser = require('cookie-parser');
 var request = require('request');
-var cookieController = require('./cookieController').setSSIDCookie;
-
-
 var findYelpData = require('./findYelpData');
 var uberURL= 'https://sandbox-api.uber.com/v1/';
-
-
 var ACCESSTOKEN;
 
-
 passport.serializeUser(function(user, done) {
-  done(null, user);
+  done(null, user.uuid);
 });
 
 passport.deserializeUser(function(obj, done) {
@@ -36,7 +31,6 @@ passport.use(new uberStrategy(
     callbackURL: 'http://localhost:3000/auth/uber/callback'
   },
   function(accessToken, refreshToken, profile, done) {
-    console.log(arguments);
     ACCESSTOKEN = accessToken;
     return done(false, profile);
   }
@@ -45,18 +39,22 @@ passport.use(new uberStrategy(
 app.use(express.static(path.join(__dirname, './../')));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded());
+app.use(cookieParser('dog'));
+app.use(require('express-session')({ secret: 'dog' }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(cors());
 
 app.get('/', /*yelpController, foursquareController, */function(req, res) {
+  console.log(req.user, 'hello');
   res.sendFile(path.join(__dirname, '../client/index.html'));
 });
 
 
 //data endpoint to get merged data
-app.get('/data', function(req,res) {
-  res.end();
+app.get('/login', function(req,res) {
+  console.log(req.session.user);
+  res.send(!!req.user);
 });
 
 
@@ -72,8 +70,9 @@ app.get('/auth/uber',
   passport.authenticate('uber', {scope: ['profile', 'request']}));
 
 app.get('/auth/uber/callback',
-  passport.authenticate('uber', { failureRedirect: '/foursquare' }), cookieController,
+  passport.authenticate('uber', { failureRedirect: '/foursquare' }),
   function(req, res) {
+    req.session.user = req.user;
     // Successful authentication, redirect home.
     res.redirect('/');
   });

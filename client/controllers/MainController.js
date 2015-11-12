@@ -133,7 +133,14 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
 
   //UBER STUFF =============================================
     //coordinates of selected restaurant**********************
-    $scope.cookie = document.cookie;
+    $scope.cookie = '';
+    $scope.rideOtw = '';
+    (function() {
+      $http.get('http://localhost:3000/login').then(function(result){
+        console.log(result.data, 'works');
+        $scope.cookie = !!result.data;
+      });
+    })();
     // *******************************************************
 
     //onClick function to oAuth into Uber*********************
@@ -166,6 +173,10 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
       $scope.product_id = id;
       UberFactory.callACar($scope.endLat, $scope.endLon, $scope.product_id).then(function(rideDetails){
         console.log(rideDetails);
+        if(rideDetails.data.request_id) {
+          $scope.toggle = false;
+          $scope.incoming = 'The Batmobile is on the way to take you to your destination';
+        }
       });
     };
 }
