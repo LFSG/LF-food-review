@@ -9,6 +9,11 @@
 ​
 }*/
 
+.selectedRestaurant {
+	position: relative;
+	background-color: lightblue;
+}
+
 #googft-legend {
   position: relative;
   bottom: 240px;
@@ -61,4 +66,12 @@
 
 .yelpId {
 	color: #fff;
+}
+
+.infoBold {
+	font-weight: 700;
+}
+
+.infoUnderline {
+	text-decoration: underline;
 }

@@ -38,9 +38,10 @@
 <!-- Sidebar of Restaurant Data -->
     <div ng-repeat="marker in myMarkers" ui-map-marker="myMarker[$index]">
     </div>
+
 <!-- Uber related HTML -->
     <div>
-      <a ng-hide="cookie" href="/auth/uber" class="uberButton"><button><img src="./client/assets/uber_badge.png"/> Log In</button></a>
+      <a ng-hide="cookie" href="/auth/uber" class="uberButton"><button><img src="./client/assets/uber_badge.png"/>Log In</button></a>
       <button class="uberButton" ng-show="cookie" ng-click="getPrices()"><img src="./client/assets/uber_badge.png"/> Estimated Cost to Selected Restaurant</button>
       <ul ng-show="toggle">
         <li ng-show="time">The estimated travel time is {{time}} minutes.</li>
@@ -48,5 +49,6 @@
         <li ng-repeat="key in price" ng-click=requestRide(key.product_id)><button>{{key.display_name}}: {{key.estimate}}</button></li>
       </ul>
     </div>
+    <div class="selectedRestaurant">{{selectedLocation}}</div>
   </div>
 </div>

@@ -49,7 +49,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(cors());
 
-app.get('/', /*yelpController, foursquareController, */function(req, res) {
+app.get('/', yelpController, foursquareController, function(req, res) {
   res.sendFile(path.join(__dirname, '../client/index.html'));
 });
 
