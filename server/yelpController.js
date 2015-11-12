@@ -13,7 +13,7 @@ var yelpController = {
   getData: function(req, res, next) {
     yelp.search({
       term: "Restaurant",
-      location: "Playa Vista, ca",
+      location: "Playa Vista, ca", 
       radius_filter: 20000
     },function(error, data) {
         if(error) {

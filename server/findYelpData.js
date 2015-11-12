@@ -7,7 +7,7 @@ var findYelpData = function (req, res, next) {
 		
 	YelpModel.findAll().then(function (posts){
 
-		console.log(posts);
+		// console.log(posts);
 		res.send(posts);
 
 	})

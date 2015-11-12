@@ -7,8 +7,8 @@ var app = angular
   .controller('MainController', ['$scope', 'UberFactory', 'YelpFactory', '$http', MainController]);
 
 
-function MainController($scope, UberFactory, YelpFactory, $http) {
-  //Map stuff===============================================
+function MainController($scope, UberFactory, YelpFactory, $http) { 
+  //Map stuff ===============================================
   $scope.lat = "0";
   $scope.lng = "0";
   $scope.accuracy = "0";
@@ -24,7 +24,7 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
 
   $scope.mapOptions = {
       center: new google.maps.LatLng($scope.lat, $scope.lng),
-      zoom: 15,
+      zoom: 14,
       mapTypeId: google.maps.MapTypeId.ROADMAP,
       clickable: true
   };
@@ -70,17 +70,37 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
   $scope.getLocation();
 
 
-  //YELP STUFF =============================================
+  // YELP STUFF =============================================
   $scope.yelpLocations = [];
-  $scope.yelpName = '';
-  $scope.yelpRating = '';
-  $scope.yelpReviewCount = '';
-  $scope.yelpAddress = '';
-  $scope.yelpCity = '';
-  $scope.yelpState = '';
-  $scope.yelpZip = '';
-  $scope.yelpData;
+  $scope.markerClick;
+  $scope.selectedLocation = 'hey';
+  // var infowindow;
 
+  // Functions to make markers bounce upon mouseover of name *******
+  $scope.bounceStart = function () {
+  // var index = this.index
+    console.log(this.location[0]);
+    for(var i = 0; i < $scope.myMarkers.length; i++) {
+      // console.log(this.location[0]);
+      if(this.location[0] === $scope.myMarkers[i].title){
+        $scope.myMarkers[i].setAnimation(google.maps.Animation.BOUNCE);
+      }     
+    }
+  }
+
+  $scope.bounceStop = function () {
+    // console.log(this.location[0]);
+    for(var i = 0; i < $scope.myMarkers.length; i++) {
+      // console.log(this.location[0]);
+      if(this.location[0] === $scope.myMarkers[i].title){
+        $scope.myMarkers[i].setAnimation(null);
+      }
+    }
+  }
+
+
+
+  // function that creates yelp markers on map ***********************
 
   $scope.getYelpLocations = function(){
     YelpFactory.getLocations().then(function (data) {
@@ -88,6 +108,9 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
       // console.log( 'yelp data is ', yelpData);
       $scope.model.myMap = new google.maps.Map(document.getElementById('map'), $scope.mapOptions);
       $scope.getLocation();
+
+
+      // make object for each restaurant ******************************
 
       yelpData.forEach(function (elem, i) {
        // console.log(elem.lat, elem.lon);
@@ -103,16 +126,31 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
           animation: google.maps.Animation.DROP
         };
 
+
+        // create content for info windows ***************************
+
+        var infoContent ='<span class="infoBold">' +yelpData[i].name + '</span><br>' + yelpData[i].address
+                          +'<br><span class="infoUnderline">Rating</span>: ' + yelpData[i].rating;
+
+
+        // create markers and info windows ***************************   
+
         var marker = new google.maps.Marker(placeObj);
         var infowindow = new google.maps.InfoWindow({
-          content: yelpData[i].name
+          content: infoContent
         });
+
+
+        // Open and close info window on map ****************
 
         google.maps.event.addListener(marker, 'click', function(event) {
           infowindow.open($scope.model.myMap, marker);
           endLat = elem.lat;
           endLon = elem.lon;
+          $scope.selectedLocation = "dope";
           console.log(endLat, endLon);
+         
+
         });
 
         google.maps.event.addListener($scope.model.myMap, 'click', function(event) {
@@ -120,16 +158,28 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
         });
 
 
+        // push markers to myMarker array, and locations and names to yelpLocations array
+
         $scope.myMarkers.push(marker);
         $scope.yelpLocations.push([placeObj.title, placeObj.idKey]);
 
       });
 
-      console.log("scope.myMarkers = ", $scope.myMarkers[0]);
-
+      // $scope.markerClick = function () {
+      //    for(var i = 0; i < $scope.myMarkers.length; i++) {
+      //     // console.log(this.location[0]);
+      //     var infowindow = new google.maps.InfoWindow({
+      //       content: yelpData[i].name + '<br>' + yelpData[i].address 
+      //     });
+      //     if(this.location[0] === $scope.myMarkers[i].title){
+      //       infowindow.open($scope.model.myMap, $scope.myMarkers[i]);
+      //     }
+      //   }
+      // }
 
     });
   };
+
 
   //UBER STUFF =============================================
     //invoked on page load to determine what to display based on whether the user is logged in or not
@@ -142,18 +192,18 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
     })();
     // *******************************************************
 
-    //onClick function to oAuth into Uber*********************
+    // onClick function to oAuth into Uber*********************
     $scope.uberLogIn = function () {
       UberFactory.auth().then(function(data) {
         // console.log(data);
       });
     };
 
-    //onClick funtion to display Uber Price estimates*********
+    // onClick funtion to display Uber Price estimates*********
 
-    //toggle variable to toggle the prices to show or hide after initial request
+    // toggle variable to toggle the prices to show or hide after initial request
     $scope.toggle = false;
-    //function for initial price request
+    // function for initial price request
     $scope.getPrices = function() {
       $scope.toggle = $scope.toggle ? false : true;
       UberFactory.prices($scope.lat, $scope.lng, endLat, endLon).then(function(uberPrices){

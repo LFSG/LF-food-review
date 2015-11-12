@@ -45,6 +45,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(cors());
 
+
 app.get('/', /*yelpController, foursquareController, */function(req, res) {
   console.log(req.user, 'hello');
   res.sendFile(path.join(__dirname, '../client/index.html'));
