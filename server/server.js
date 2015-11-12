@@ -83,8 +83,8 @@ app.post('/uber', function(req, res) {
     url : uberURL + 'estimates/price',
     qs : {
       server_token : config.get("uber.serverToken"),
-      start_latitude : 33.979050,
-      start_longitude : -118.422818,
+      start_latitude : req.body.start_latitude,
+      start_longitude : req.body.start_longitude,
       end_latitude : req.body.end_latitude,
       end_longitude : req.body.end_longitude
     }
@@ -106,8 +106,8 @@ app.post('/callacar', function(req, res) {
     },
     body: JSON.stringify({
       product_id: req.body.product_id,
-      start_latitude : 33.979050,
-      start_longitude : -118.422818,
+      start_latitude : req.body.start_latitude,
+      start_longitude : req.body.start_longitude,
       end_latitude : req.body.end_latitude,
       end_longitude : req.body.end_longitude,
     })

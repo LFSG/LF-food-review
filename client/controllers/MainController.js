@@ -44,20 +44,20 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
   $scope.showError = function (error) {
       switch (error.code) {
           case error.PERMISSION_DENIED:
-              $scope.error = "User denied the request for Geolocation."
+              $scope.error = "User denied the request for Geolocation.";
               break;
           case error.POSITION_UNAVAILABLE:
-              $scope.error = "Location information is unavailable."
+              $scope.error = "Location information is unavailable.";
               break;
           case error.TIMEOUT:
-              $scope.error = "The request to get user location timed out."
+              $scope.error = "The request to get user location timed out.";
               break;
           case error.UNKNOWN_ERROR:
-              $scope.error = "An unknown error occurred."
+              $scope.error = "An unknown error occurred.";
               break;
       }
       $scope.$apply();
-  }
+  };
 
   $scope.getLocation = function () {
       if (navigator.geolocation) {
@@ -66,7 +66,7 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
       else {
           $scope.error = "Geolocation is not supported by this browser.";
       }
-  }
+  };
   $scope.getLocation();
 
 
@@ -79,7 +79,7 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
   $scope.yelpCity = '';
   $scope.yelpState = '';
   $scope.yelpZip = '';
-  $scope.yelpData
+  $scope.yelpData;
 
 
   $scope.getYelpLocations = function(){
@@ -132,9 +132,8 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
   };
 
   //UBER STUFF =============================================
-    //coordinates of selected restaurant**********************
+    //invoked on page load to determine what to display based on whether the user is logged in or not
     $scope.cookie = '';
-    $scope.rideOtw = '';
     (function() {
       $http.get('http://localhost:3000/login').then(function(result){
         console.log(result.data, 'works');
@@ -146,7 +145,7 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
     //onClick function to oAuth into Uber*********************
     $scope.uberLogIn = function () {
       UberFactory.auth().then(function(data) {
-        console.log(data);
+        // console.log(data);
       });
     };
 
@@ -156,10 +155,8 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
     $scope.toggle = false;
     //function for initial price request
     $scope.getPrices = function() {
-      console.log($scope.lat, 'HELLOOOOOOOO');
       $scope.toggle = $scope.toggle ? false : true;
-      UberFactory.prices(endLat, endLon).then(function(uberPrices){
-        console.log(uberPrices);
+      UberFactory.prices($scope.lat, $scope.lng, endLat, endLon).then(function(uberPrices){
         $scope.price = uberPrices.data.prices;
         $scope.distance = uberPrices.data.prices[0].distance;
         $scope.time = Math.ceil(uberPrices.data.prices[0].duration/60);
@@ -171,8 +168,7 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
     //
     $scope.requestRide = function(id) {
       $scope.product_id = id;
-      UberFactory.callACar($scope.endLat, $scope.endLon, $scope.product_id).then(function(rideDetails){
-        console.log(rideDetails);
+      UberFactory.callACar($scope.lat, $scope.lng, endLat, endLon, $scope.product_id).then(function(rideDetails){
         if(rideDetails.data.request_id) {
           $scope.toggle = false;
           $scope.incoming = 'The Batmobile is on the way to take you to your destination';
