@@ -21,28 +21,24 @@
 
 
 <div ng-app='myApp'>
-
   <div class="col-md-6">
-
   </div>
-
   <div ng-controller="MainController" class="container col-md-6" ui-view>
-
     <ui-gmap-google-map center='map.center' zoom='map.zoom'>
-
        <ui-gmap-marker coords="marker.coords" options="marker.options" events="marker.events" idkey="marker.id">
         </ui-gmap-marker>
-
        <ui-gmap-markers models="markers" coords="markers">
        </ui-gmap-markers>
-
     </ui-gmap-google-map>
+<!-- UBER RELATED HTML -->
     <div>
-    <!-- <div ng-controller="uberController" ui-view> -->
-      <button ng-click="getPrices()"><img src="./client/assets/uber.png"/></button>
-      <ul>
-        <li ng-model="time">{{time}}</li>
-        <li ng-model="price">{{price}}</li>
+      <a ng-hide="cookie" href="/auth/uber" class="uberButton"><button><img src="./client/assets/uber_badge.png"/> Log In</button></a>
+      <button class="uberButton" ng-show="cookie" ng-click="getPrices()"><img src="./client/assets/uber_badge.png"/> Estimated Cost to Selected Restaurant</button>
+      <ul ng-show="toggle">
+        <li ng-show="time">The estimated travel time is {{time}} minutes.</li>
+        <li ng-show="distance">The restaurant is {{distance}} miles away.</lis>
+        <li ng-repeat="key in price" ng-click=requestRide(key.product_id)><button>{{key.display_name}}: {{key.estimate}}</button></li>
+      </ul>
     </div>
   </div>
 </div>

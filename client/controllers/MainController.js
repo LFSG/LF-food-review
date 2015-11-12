@@ -40,16 +40,40 @@ function MainController($scope, UberFactory, $http) {
     }
   ];
 //UBER STUFF =============================================
-  $scope.productID = '';
-  $scope.endLat = '';
-  $scope.endLon = '';
-  $scope.time = '';
-  $scope.price = '';
-  $scope.getPrices = function(){
-    UberFactory.prices().success(function(data) {
-      $scope.price = data.prices[0].estimate;
-      $scope.time = `${Math.ceil(data.prices[0].duration/60)} minutes away`;
-      $scope.productID = data.prices.product_id;
+  //coordinates of selected restaurant**********************
+  $scope.cookie = document.cookie;
+  $scope.endLat = 34.062117;
+  $scope.endLon = -118.350273;
+  // *******************************************************
+
+  //onClick function to oAuth into Uber*********************
+  $scope.uberLogIn = function () {
+    UberFactory.auth().then(function(data) {
+      console.log(data);
     });
+  }
+
+  //onClick funtion to display Uber Price estimates*********
+
+  //toggle variable to toggle the prices to show or hide after initial request
+  $scope.toggle = false;
+  //function for initial price request
+  $scope.getPrices = function() {
+    $scope.toggle = $scope.toggle ? false : true;
+    UberFactory.prices($scope.endLat, $scope.endLon).then(function(uberPrices){
+      $scope.price = uberPrices.data.prices;
+      $scope.distance = uberPrices.data.prices[0].distance;
+      $scope.time = Math.ceil(uberPrices.data.prices[0].duration/60);
+      $scope.productID = uberPrices.data.prices.product_id;
+    });
+  };
+  // ******************************************************
+
+  //
+  $scope.requestRide = function(id) {
+    $scope.product_id = id;
+    UberFactory.callACar($scope.endLat, $scope.endLon, $scope.product_id).then(function(rideDetails){
+      console.log(rideDetails);
+    })
   }
 }

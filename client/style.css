@@ -44,3 +44,11 @@
 	margin-bottom: 0px;
 	height: 40px;
 }
+
+.uberButton {
+  font-size: 28px;
+  font-weight: bold;
+  font-family: 'helvetica', 'sans-serif';
+  margin-top: 5px;
+  display: block;
+}
