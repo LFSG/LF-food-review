@@ -62,11 +62,11 @@
     <div>
       <a ng-hide="cookie" href="/auth/uber" class="uberButton"><button><img src="./client/assets/uber_badge.png"/>Log In</button></a>
       <button class="uberButton" ng-show="cookie" ng-click="getPrices()"><img src="./client/assets/uber_badge.png"/> Estimated Cost to Selected Restaurant</button>
-      <div ng-bind="incoming">{{incoming}}</div>
+      <div ng-hide="toggle" ng-bind="incoming">{{incoming}}</div>
       <ul class="list-group" ng-show="toggle">
         <li class="list-group-item" ng-show="time">The estimated travel time is {{time}} minutes.</li>
         <li class="list-group-item" ng-show="distance">The restaurant is {{distance}} miles away.</lis>
-        <li class="list-group-item" ng-repeat="key in price" ng-click=requestRide(key.product_id)>{{key.display_name}}: {{key.estimate}}</li>
+        <li class="list-group-item hover" ng-repeat="key in price" ng-click=requestRide(key.product_id)>{{key.display_name}}: {{key.estimate}}</li>
       </ul>
     </div>
   </div>
