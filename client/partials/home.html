@@ -19,15 +19,34 @@
   </div>
 </nav>
 
+<!-- card flip -->
+<!-- <div class="flip-container">
+   <div class="flipper">
+     <div class="front">
+       <h3>This is a card that flips</h3>
+     </div>
+     <div class="back">
+       <div class="back-title"></div>
+       <p>This is the back of the card</p>
+     </div>
+   </div>
+ </div> -->
+
 
 <div ng-app='myApp'>
   <div ng-controller="MainController" class="col-md-6">
       <button ng-click="getYelpLocations()">Get Yelp Data</button>
       <div ng-repeat="location in yelpLocations">
-        <div class="yelpListItem animated bounceInDown" ng-mouseover="bounceStart()" ng-mouseLeave="bounceStop()" ng-click="markerClick()">
-          {{location[0]}}
-          <div class='yelpId'>
-            {{location[1]}}
+        <div class="flip-container listContainer col-md-12">
+          <div class="flipper" ng-mouseover="bounceStart()" ng-mouseLeave="bounceStop()" ng-click="markerClick()">
+            <div class="front yelpTitle yelpListItem animated bounceInDown">
+              {{location[0]}}
+            </div>
+            <div class='back yelpId yelpListItem'>
+                <p><span class="infoBold">Rating: </span>{{location[1]}}</p><br>
+                <p><span class="infoBold">Reviews: </span>{{location[3]}}</p><br>
+                <p><span class="infoBold">Address: </span>{{location[2]}}</p>
+            </div>
           </div>
         </div>
       </div>
