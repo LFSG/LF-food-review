@@ -16,26 +16,8 @@ describe('server routes', function () {
       done();
     });
   });
-  it('should return 200 for /data', function (done) {
-    http.get('http://localhost:3000/data', function (res) {
-      assert.equal(200, res.statusCode);
-      done();
-    });
-  });
   it('should return 200 for /yelp', function (done) {
     http.get('http://localhost:3000/yelp', function (res) {
-      assert.equal(200, res.statusCode);
-      done();
-    });
-  });
-  it('should return 200 for /foursquare', function (done) {
-    http.get('http://localhost:3000/foursquare', function (res) {
-      assert.equal(200, res.statusCode);
-      done();
-    });
-  });
-  it('should return 200 for /uber', function (done) {
-    http.get('http://localhost:3000/uber', function (res) {
       assert.equal(200, res.statusCode);
       done();
     });

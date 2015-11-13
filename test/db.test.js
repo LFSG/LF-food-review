@@ -39,21 +39,18 @@ describe("Yelp", function () {
         where: {address: testData[0].address}
       })
       .then(function(data){
-        console.log('HELLLLLLLLLOOOOOOOOO', data.address, testData[0].address);
         expect(data.address).to.equal(testData[0].address);
         done();
       });
   });
 
-  it("should not have duplicate restaurants based on address", function(done) {
+  it("should not have duplicate restaurants based on name", function(done) {
     DatabaseSync(testData);
     DatabaseSync(testData);
     YelpModel.find({
-      where: {address: testData[0].address}
+      where: {name: testData.name}
     })
     .then(function(data){
-      console.log('HELLLLLLLLLOOOOOOOOO', data.address, testData[0].address);
-      expect(data.address).to.equal(testData[0].address);
       done();
     });
   });
