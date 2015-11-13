@@ -111,14 +111,16 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
       // make object for each restaurant ******************************
 
       yelpData.forEach(function (elem, i) {
-       // console.log(elem.lat, elem.lon);
+       console.log(yelpData[i]);
         var latlng = new google.maps.LatLng(elem.lat, elem.lon);
 
         var placeObj = {
           position: latlng,
           latitude: elem.lat,
           longitude: elem.lon,
+          address: yelpData[i].address,
           rating: elem.rating,
+          reviews: yelpData[i].review_count,
           map: $scope.model.myMap,
           idKey: yelpData[i].id,
           title: yelpData[i].name,
@@ -160,7 +162,7 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
 
         // push markers to myMarker array, and locations and names to yelpLocations array
 
-        var listContent = [placeObj.title, placeObj.rating];
+        var listContent = [placeObj.title, placeObj.rating, placeObj.address, placeObj.reviews];
 
         $scope.myMarkers.push(marker);
         $scope.yelpLocations.push(listContent);
@@ -178,7 +180,6 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
           if(this.location[0] === $scope.myMarkers[i].title){
             infowindow.open($scope.model.myMap, $scope.myMarkers[i]);
             $scope.myMarkers[i].setAnimation(null);
-
           }
         }
       }
