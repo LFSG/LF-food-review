@@ -112,7 +112,7 @@ CARD FLIP
 	margin: 5px;
 }
 
-.flip-container:hover .flipper, 
+.flip-container:hover .flipper,
 	.flip-container.hover .flipper {
 		-webkit-transform: rotateY(180deg);
 		-moz-transform: rotateY(180deg);
@@ -168,7 +168,9 @@ CARD FLIP
 	/*z-index: 3;*/
 
 }
-
+.hover:hover{
+	background-color: gray;
+}
 .front .name {
 	font-size: 2em;
 	display: inline-block;
@@ -180,4 +182,3 @@ CARD FLIP
 	-o-transform: rotate(-20deg);
 	transform: rotate(-20deg);
 }
-

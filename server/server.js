@@ -62,11 +62,6 @@ app.get('/login', function(req,res) {
 //data endpoint to get yelp data
 app.get('/yelp', findYelpData);
 
-//data endpoint to get foursquare data
-app.get('/foursquare', function(req,res) {
-  res.send('ok');
-});
-
 app.get('/auth/uber',
   passport.authenticate('uber', {scope: ['profile', 'request']}));
 

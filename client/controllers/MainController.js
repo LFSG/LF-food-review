@@ -7,7 +7,7 @@ var app = angular
   .controller('MainController', ['$scope', 'UberFactory', 'YelpFactory', '$http', MainController]);
 
 
-function MainController($scope, UberFactory, YelpFactory, $http) { 
+function MainController($scope, UberFactory, YelpFactory, $http) {
   //Map stuff ===============================================
   $scope.lat = "0";
   $scope.lng = "0";
@@ -83,7 +83,7 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
     for(var i = 0; i < $scope.myMarkers.length; i++) {
       if(this.location[0] === $scope.myMarkers[i].title){
         $scope.myMarkers[i].setAnimation(google.maps.Animation.BOUNCE);
-      }     
+      }
     }
   }
 
@@ -135,7 +135,7 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
                           +'<br><span class="infoUnderline">Reviews</span>: ' + yelpData[i].review_count
 
 
-        // create markers and info windows ***************************   
+        // create markers and info windows ***************************
 
         var marker = new google.maps.Marker(placeObj);
         var infowindow = new google.maps.InfoWindow({
@@ -151,7 +151,7 @@ function MainController($scope, UberFactory, YelpFactory, $http) {
           endLon = elem.lon;
           $scope.selectedLocation = "dope";
           console.log(endLat, endLon);
-         
+
 
         });
 
